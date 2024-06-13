@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public float gravityModifier;
     public bool isOnGround = false;
+    public bool gameOver;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,10 +28,19 @@ public class PlayerController : MonoBehaviour
             isOnGround = false;
         }
     }
-
-    // Function to detect ground state when player collition with ground 
-    private void OnCollisionEnter()
+    private void OnCollisionEnter(Collision collision)
     {
-        isOnGround = true;
+        // If there is a collision with the gameObject tagged as "Ground", isOnGround state is changed to True
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = true;
+        }
+        // If collition with Obstacle tagged gameObject, gameOver printed as a Debug message
+        else if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            gameOver = true;
+            Debug.Log("Game Over!");
+        }
+
     }
 }
