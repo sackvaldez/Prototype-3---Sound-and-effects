@@ -8,6 +8,8 @@ public class MoveLeft : MonoBehaviour
     private float speed = 20;
     // Variable to connect with another script
     private PlayerController playerControllerScript;
+    // Limit of the screen
+    private float leftBound = -15;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,11 @@ public class MoveLeft : MonoBehaviour
         {
             // X axis movement using time and speed variable
             transform.Translate(Vector3.left * Time.deltaTime * speed);
+        }
+        // If the gameObject position goes beyond the screen and has the Obstacle tag, it gets destroyed
+        if (transform.position.x < leftBound && gameObject.CompareTag("Obstacle"))
+        {
+            Destroy(gameObject);
         }
 
     }
