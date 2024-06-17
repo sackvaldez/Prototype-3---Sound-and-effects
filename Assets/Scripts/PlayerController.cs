@@ -10,11 +10,16 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier;
     public bool isOnGround = false;
     public bool gameOver;
+    // Animation type variable
+    private Animator playerAnim;
+
     // Start is called before the first frame update
     void Start()
     {
-        // Get gravitiy component from Player´s Inspector
+        // Get gravity component from Player´s Inspector
         playerRb = GetComponent<Rigidbody>();
+        // Get animator component from Player´s Inspector
+        playerAnim = GetComponent<Animator>();
         Physics.gravity *= gravityModifier;
     }
 
@@ -26,6 +31,8 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
+            // When jumping, trigger the jump animation
+            playerAnim.SetTrigger("Jump_trig");
         }
     }
     private void OnCollisionEnter(Collision collision)
