@@ -42,10 +42,13 @@ public class PlayerController : MonoBehaviour
         {
             isOnGround = true;
         }
-        // If collition with Obstacle tagged gameObject, gameOver printed as a Debug message
+        // If collition with Obstacle tagged gameObject, gameOver is printed as a Debug message
         else if (collision.gameObject.CompareTag("Obstacle"))
         {
             gameOver = true;
+            // In order to active death animation, we have to put 2 conditions: Death_b to true and DeathType_int to 1 (cus it exists two different deaths)
+            playerAnim.SetBool("Death_b", true);
+            playerAnim.SetInteger("DeathType_int", 1);
             Debug.Log("Game Over!");
         }
 
