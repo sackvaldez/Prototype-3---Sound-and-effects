@@ -8,10 +8,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRb;
     public float jumpForce;
     public float gravityModifier;
-    public bool isOnGround = false;
+    public bool isOnGround = true;
     public bool gameOver;
     // Animation type variable
     private Animator playerAnim;
+    public ParticleSystem explosionParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +47,9 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.CompareTag("Obstacle"))
         {
             gameOver = true;
-            // In order to active death animation, we have to put 2 conditions: Death_b to true and DeathType_int to 1 (cus it exists two different deaths)
+            // We play the particle effect animation when colliding with obstacle
+            explosionParticle.Play();
+            // In order to active death animation, we have to put two conditions: Death_b to true and DeathType_int to 1 (cus it exists two different deaths)
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
             Debug.Log("Game Over!");
