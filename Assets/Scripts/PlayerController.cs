@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnim;
     public ParticleSystem explosionParticle;
     public ParticleSystem dirtParticle;
+    public AudioClip crashSound;
+    public AudioClip jumpSound;
+    private AudioSource playerAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +26,7 @@ public class PlayerController : MonoBehaviour
         // Get animator component from Player´s Inspector
         playerAnim = GetComponent<Animator>();
         Physics.gravity *= gravityModifier;
+        playerAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -37,6 +41,8 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetTrigger("Jump_trig");
             // Stop dirt animation while jumping
             dirtParticle.Stop();
+            // Sound effect of jumping
+            playerAudio.PlayOneShot(jumpSound);
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -54,6 +60,8 @@ public class PlayerController : MonoBehaviour
             // We play the explosion particle effect animation when colliding with obstacle and stop the dirt one
             explosionParticle.Play();
             dirtParticle.Stop();
+            // Sound effect of crash
+            playerAudio.PlayOneShot(crashSound);
             // In order to active death animation, we have to put two conditions: Death_b to true and DeathType_int to 1 (cus it exists two different deaths)
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
