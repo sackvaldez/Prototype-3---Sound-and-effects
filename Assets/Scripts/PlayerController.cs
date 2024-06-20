@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     // Animation type variable
     private Animator playerAnim;
     public ParticleSystem explosionParticle;
+    public ParticleSystem dirtParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,8 @@ public class PlayerController : MonoBehaviour
             isOnGround = false;
             // When jumping, trigger the jump animation
             playerAnim.SetTrigger("Jump_trig");
+            // Stop dirt animation while jumping
+            dirtParticle.Stop();
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -42,13 +45,15 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
+            dirtParticle.Play();
         }
         // If collition with Obstacle tagged gameObject, gameOver is printed as a Debug message
         else if (collision.gameObject.CompareTag("Obstacle"))
         {
             gameOver = true;
-            // We play the particle effect animation when colliding with obstacle
+            // We play the explosion particle effect animation when colliding with obstacle and stop the dirt one
             explosionParticle.Play();
+            dirtParticle.Stop();
             // In order to active death animation, we have to put two conditions: Death_b to true and DeathType_int to 1 (cus it exists two different deaths)
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
