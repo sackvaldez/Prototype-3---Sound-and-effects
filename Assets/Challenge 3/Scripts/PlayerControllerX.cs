@@ -8,7 +8,7 @@ public class PlayerControllerX : MonoBehaviour
 
     public float floatForce;
     private float gravityModifier = 1.5f;
-    private float offBounds = 13f;
+    private float maxHeight = 15f;
     private Rigidbody playerRb;
 
     public ParticleSystem explosionParticle;
@@ -17,6 +17,8 @@ public class PlayerControllerX : MonoBehaviour
     private AudioSource playerAudio;
     public AudioClip moneySound;
     public AudioClip explodeSound;
+    public AudioClip bounceSound;
+
 
 
     // Start is called before the first frame update
@@ -36,10 +38,14 @@ public class PlayerControllerX : MonoBehaviour
     void Update()
     {
         // While space is pressed and player is low enough, float up
-        if (Input.GetKeyDown(KeyCode.Space) && !gameOver && transform.position.y < offBounds)
+        if (Input.GetKeyDown(KeyCode.Space) && !gameOver)
         {
             // CH: Added ForceMode.Impulse to use an instant force to impulse rigidBody
             playerRb.AddForce(Vector3.up * floatForce, ForceMode.Impulse);
+        }
+        if (transform.position.y > maxHeight)
+        {
+            transform.position = new Vector3(transform.position.x, maxHeight, transform.position.z);
         }
     }
 
@@ -62,6 +68,12 @@ public class PlayerControllerX : MonoBehaviour
             playerAudio.PlayOneShot(moneySound, 1.0f);
             Destroy(other.gameObject);
 
+        }
+        // if player collides with ground, bounces and play sound effect
+        else if (other.gameObject.CompareTag("Ground"))
+        {
+            playerAudio.PlayOneShot(bounceSound, 1.0f);
+            playerRb.AddForce(Vector3.up * floatForce, ForceMode.Impulse);
         }
 
     }
